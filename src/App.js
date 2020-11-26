@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable import/extensions */
+/* eslint-disable no-undef */
+import React from "react"
+import { Route, Switch } from "react-router-dom"
+import Home from "./pages/index.jsx"
+import Blog from "./pages/blog"
+import BlogPost from "./pages/blogPost.jsx"
+import ContactUS from "./pages/contact-us"
+import AboutUs from "./pages/about-us"
+import Error from "./pages/error.jsx"
+import "./styles/style.css"
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={(renderProps) => <Home {...renderProps} />}
+        />
+        <Route
+          exact
+          path="/blog"
+          render={(renderProps) => <Blog {...renderProps} />}
+        />
+
+        <Route
+          path="/blog/:uid"
+          render={(renderProps) => <BlogPost {...renderProps} />}
+        />
+        <Route
+          exact
+          path="/about-us"
+          render={(renderProps) => <AboutUs {...renderProps} />}
+        />
+        <Route
+          exact
+          path="/contact-us"
+          render={(renderProps) => <ContactUS {...renderProps} />}
+        />
+        <Route path="*" render={(renderProps) => <Error {...renderProps} />} />
+      </Switch>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
