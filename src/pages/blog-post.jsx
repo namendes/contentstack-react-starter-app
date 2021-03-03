@@ -4,7 +4,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react/prop-types */
 import React from "react"
-import Skeleton from "react-loading-skeleton"
 import moment from "moment"
 import ReactHtmlParser from "react-html-parser"
 import Stack from "../sdk/entry"
@@ -91,7 +90,7 @@ class BlogPost extends React.Component {
     ) : this.state.error.errorStatus ? (
       this.props.history.push("/error", [this.state.error])
     ) : (
-      <Skeleton count={40} />
+      ""
     )
   }
 }

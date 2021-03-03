@@ -5,7 +5,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 import React from "react"
-import Skeleton from "react-loading-skeleton"
 import Stack from "../sdk/entry"
 
 import Layout from "../components/layout"
@@ -66,7 +65,7 @@ class About extends React.Component {
     ) : this.state.error.errorStatus ? (
       this.props.history.push("/error", [this.state.error])
     ) : (
-      <Skeleton count={40} />
+      ""
     )
   }
 }

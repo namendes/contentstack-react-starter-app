@@ -5,7 +5,6 @@
 /* eslint-disable react/prop-types */
 
 import React from "react"
-import Skeleton from "react-loading-skeleton"
 
 import moment from "moment"
 import { Link } from "react-router-dom"
@@ -138,7 +137,7 @@ class Blog extends React.Component {
     ) : this.state.error.errorStatus ? (
       this.props.history.push("/error", [this.state.error])
     ) : (
-      <Skeleton count={40} />
+      ""
     )
   }
 }
