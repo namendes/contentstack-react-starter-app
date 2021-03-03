@@ -1,44 +1,34 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-danger */
-/* eslint-disable no-prototype-builtins */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react"
-import RelatedLinks from "./relatedLinks"
+import { Link } from "react-router-dom"
 
-class Section extends React.Component {
-  render() {
+export default function Section(props) {
+  const { section } = props
+  function contentSection() {
     return (
-      <div className="max-width">
-        {this.props.section.hasOwnProperty("title_h1") ? (
-          <div className="top-section padding-top">
-            <h2>{this.props.section.title_h1}</h2>
-            <p>{this.props.section.description}</p>
-          </div>
+      <div className="home-content">
+        {section.title_h2 && <h2>{section.title_h2}</h2>}
+        {section.description && <p>{section.description}</p>}
+        {section.call_to_action.title && section.call_to_action.href ? (
+          <Link to={section.call_to_action.href} className="btn secondary-btn">
+            {section.call_to_action.title}
+          </Link>
         ) : (
           ""
         )}
-        <div className="buckets padding-both">
-          {this.props.section.hasOwnProperty("heading")
-            ? this.props.section.heading.map((bucket) => (
-                <div className="bucket" key={bucket.title_h2}>
-                  <div className="inner">
-                    <h3>{bucket.title_h2}</h3>
-                    <div
-                      dangerouslySetInnerHTML={{ __html: bucket.description }}
-                    />
-                  </div>
-                </div>
-              ))
-            : ""}
-          {this.props.relatedPages ? (
-            <RelatedLinks relatedPages={this.props.relatedPages} />
-          ) : (
-            ""
-          )}
-        </div>
       </div>
     )
   }
+
+  function imageContent() {
+    return <img src={section.image.url} alt={section.image.filename} />
+  }
+  return (
+    <div className="home-advisor-section">
+      {section.image_alignment === "Left"
+        ? [imageContent(), contentSection()]
+        : [contentSection(), imageContent()]}
+    </div>
+  )
 }
-export default Section

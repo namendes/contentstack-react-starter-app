@@ -5,10 +5,11 @@ import React from "react"
 import { Route, Switch } from "react-router-dom"
 import Home from "./pages/index.jsx"
 import Blog from "./pages/blog"
-import BlogPost from "./pages/blogPost.jsx"
+import BlogPost from "./pages/blog-post.jsx"
 import ContactUS from "./pages/contact-us"
 import AboutUs from "./pages/about-us"
 import Error from "./pages/error.jsx"
+import "./styles/third-party.css"
 import "./styles/style.css"
 
 function App() {

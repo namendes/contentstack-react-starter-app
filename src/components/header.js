@@ -1,44 +1,48 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-lone-blocks */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/prefer-stateless-function */
+
 import React from "react"
 import { Link } from "react-router-dom"
+import ReactHtmlParser from "react-html-parser"
 
-class Header extends React.Component {
-  render() {
-    return (
-      <header>
-        <div className="max-width">
-          <div className="wrapper-logo">
-            <a href="/" title="Contentstack">
-              <img
-                className="logo"
-                src={this.props.header.logo.url}
-                alt={this.props.header.logo.filename}
-              />
-            </a>
-          </div>
-          <nav>
-            <ul>
-              {this.props.header.navigation_menu.map((list) => (
-                <li key={list.label}>
-                  <Link
-                    to={list.page_reference[0].url}
-                    className={
-                      this.props.activeTab === list.label ? "active" : ""
-                    }
-                  >
-                    {list.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+export default function Header(props) {
+  const { header } = props
+  return (
+    <header className="header">
+      {header.notification_bar.show_announcement && (
+        <div className="note-div">
+          {ReactHtmlParser(header.notification_bar.announcement_text)}
         </div>
-      </header>
-    )
-  }
+      )}
+      <div className="max-width header-div">
+        <div className="wrapper-logo">
+          <Link to="/" title="Contentstack">
+            <img
+              className="logo"
+              src={header.logo.url}
+              alt={header.logo.filename}
+            />
+          </Link>
+        </div>
+        <input className="menu-btn" type="checkbox" id="menu-btn" />
+        <label className="menu-icon" htmlFor="menu-btn">
+          <span className="navicon" />
+        </label>
+        <nav className="menu">
+          <ul className="nav-ul header-ul">
+            {header.navigation_menu.map((list) => (
+              <li key={list.label} className="nav-li">
+                <Link
+                  to={list.page_reference[0].url}
+                  className={props.activeTab === list.label ? "active" : ""}
+                >
+                  {list.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+  )
 }
-export default Header

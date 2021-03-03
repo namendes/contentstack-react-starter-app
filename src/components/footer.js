@@ -1,66 +1,52 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-danger */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/prefer-stateless-function */
-import React from "react"
 
-class Footer extends React.Component {
-  render() {
-    return (
-      <footer>
-        <div className="max-width flex">
-          <div className="col-quarter">
-            <a href="/">
+import React from "react"
+import { Link } from "react-router-dom"
+import ReactHtmlParser from "react-html-parser"
+
+export default function Footer(props) {
+  const { footer } = props
+  return (
+    <footer>
+      <div className="max-width footer-div">
+        <div className="col-quarter">
+          <Link to="/">
+            {footer.logo && (
               <img
-                src="https://images.contentstack.io/v3/assets/blt22a18837cca1a3b0/blt529c91fbcabe8c5c/5f8096a93bf9954172cf5dfb/cslogo.png"
-                alt=""
-                width="40px"
-                height="40px"
+                src={footer.logo.url}
+                alt="contentstack logo"
                 title="contentstack"
+                className="logo footer-logo"
               />
-            </a>
-          </div>
-          <div className="col-half">
-            <nav>
-              <ul>
-                {this.props.footer.hasOwnProperty("nav_links")
-                  ? this.props.footer.nav_links.link.map((link) => (
-                      <li key={link.title}>
-                        <a href={link.href}>{link.title}</a>
-                      </li>
-                    ))
-                  : ""}
-              </ul>
-            </nav>
-          </div>
-          <div className="col-quarter">
-            <div className="social-nav">
-              {this.props.footer.social_share.map((social) => (
-                <a
-                  href={social.link.href}
-                  title={social.link.title}
-                  key={social.link.title}
-                >
-                  <span className="fa-1x fa-stack">
-                    <i className="fa fa-circle fa-stack-2x">
-                      <span style={{ background: `url(${social.icon.url})` }} />
-                    </i>
-                  </span>
-                </a>
+            )}
+          </Link>
+        </div>
+        <div className="col-half">
+          <nav>
+            <ul>
+              {footer.navigation.link?.map((link) => (
+                <li key={link.title} className="footer-nav-li">
+                  <Link to={link.href}>{link.title}</Link>
+                </li>
               ))}
-            </div>
-            <div
-              className="copyright"
-              dangerouslySetInnerHTML={{
-                __html: `${this.props.footer.copyright}`,
-              }}
-            />
+            </ul>
+          </nav>
+        </div>
+        <div className="col-quarter social-link">
+          <div className="social-nav">
+            {footer.social.social_share?.map((social) => (
+              <a
+                href={social.link.href}
+                title={social.link.title}
+                key={social.link.title}
+              >
+                <img src={social.icon.url} alt="social icon" />
+              </a>
+            ))}
           </div>
         </div>
-      </footer>
-    )
-  }
+      </div>
+      <div className="copyright">{ReactHtmlParser(footer.copyright)}</div>
+    </footer>
+  )
 }
-export default Footer

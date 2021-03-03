@@ -1,15 +1,13 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable array-callback-return */
-/* eslint-disable consistent-return */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/prefer-stateless-function */
 /* eslint-disable no-console */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React from "react"
+import Skeleton from "react-loading-skeleton"
 import Stack from "../sdk/entry"
+
 import Layout from "../components/layout"
-import Banner from "../components/banner"
-import Section from "../components/section"
+import RenderComponenets from "../components/render-components"
 
 class Home extends React.Component {
   constructor(props) {
@@ -24,10 +22,10 @@ class Home extends React.Component {
 
   async componentDidMount() {
     try {
-      const result = await Stack.getSpecificEntry(
+      const result = await Stack.getSpecificEntryWithRef(
         "page",
         this.props.location.pathname,
-        "related_pages",
+        ["page_components.from_blog.featured_blogs"],
         "en-us"
       )
       const header = await Stack.getEntryWithRef(
@@ -58,29 +56,12 @@ class Home extends React.Component {
         seo={this.state.entry.seo}
         activeTab="Home"
       >
-        {this.state.entry.page_components.map((component, key) => {
-          if (component.hero_banner) {
-            return (
-              <Banner
-                key={key}
-                hero_banner={component.hero_banner}
-                title={this.state.entry.title}
-              />
-            )
-          }
-          if (component.section) {
-            return (
-              <Section
-                key={key}
-                section={component.section}
-                relatedPages={this.state.entry.related_pages}
-              />
-            )
-          }
-        })}
+        <RenderComponenets pageComponents={this.state.entry.page_components} />
       </Layout>
+    ) : this.state.error.errorStatus ? (
+      this.props.history.push("/error", [this.state.error])
     ) : (
-      ""
+      <Skeleton count={40} />
     )
   }
 }

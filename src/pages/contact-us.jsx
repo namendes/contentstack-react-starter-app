@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-console */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable array-callback-return */
@@ -5,8 +6,11 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react/prop-types */
 import React from "react"
+import Skeleton from "react-loading-skeleton"
 import Stack from "../sdk/entry"
+
 import Layout from "../components/layout"
+import RenderComponents from "../components/render-components"
 
 class ContactUs extends React.Component {
   constructor(props) {
@@ -21,10 +25,10 @@ class ContactUs extends React.Component {
 
   async componentDidMount() {
     try {
-      const result = await Stack.getSpecificEntry(
+      const result = await Stack.getSpecificEntryWithRef(
         "page",
         this.props.location.pathname,
-        "related_pages",
+        ["page_components.from_blog.featured_blogs"],
         "en-us"
       )
       const header = await Stack.getEntryWithRef(
@@ -55,48 +59,12 @@ class ContactUs extends React.Component {
         seo={this.state.entry.seo}
         activeTab="Contact Us"
       >
-        <div className="contact-us">
-          <div className="max-width flex padding-both tall">
-            <div className="col-half">
-              <h2>{this.state.entry.title}</h2>
-              {this.state.entry.page_components.map((component) => {
-                if (component.rich_text) {
-                  return (
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: `${component.rich_text.rte}`,
-                      }}
-                    />
-                  )
-                }
-                if (component.contact_details) {
-                  return (
-                    <div className="address-block padding-bottom">
-                      <h3>Address</h3>
-                      <p>{component.contact_details.address}</p>
-                      <p className="phone">
-                        <a href="tel:Phone">
-                          {component.contact_details.phone}
-                        </a>
-                      </p>
-                      <p className="email">
-                        <a href="mailto:Email">
-                          {component.contact_details.email}
-                        </a>
-                      </p>
-                    </div>
-                  )
-                }
-              })}
-            </div>
-            <div className="col-half">
-              <div className="contact-form" />
-            </div>
-          </div>
-        </div>
+        <RenderComponents pageComponents={this.state.entry.page_components} />
       </Layout>
+    ) : this.state.error.errorStatus ? (
+      this.props.history.push("/error", [this.state.error])
     ) : (
-      ""
+      <Skeleton count={40} />
     )
   }
 }

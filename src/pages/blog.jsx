@@ -1,32 +1,33 @@
 /* eslint-disable no-console */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-danger */
 /* eslint-disable react/prop-types */
+
 import React from "react"
+import Skeleton from "react-loading-skeleton"
+
+import moment from "moment"
+import { Link } from "react-router-dom"
+import ReactHtmlParser from "react-html-parser"
 import Stack from "../sdk/entry"
 import Layout from "../components/layout"
-import Banner from "../components/banner"
-
-function dateSetter(params) {
-  const date = new Date(params)
-  const yy = new Intl.DateTimeFormat("en", { year: "numeric" }).format(date)
-  const mm = new Intl.DateTimeFormat("en", { month: "short" }).format(date)
-  const dd = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(date)
-  return `${mm}-${dd}-${yy}`
-}
+import ArchiveRelative from "../components/archive-relative"
+import RenderComponents from "../components/render-components"
 
 class Blog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       entry: undefined,
+      blogList: [],
+      archived: [],
       header: undefined,
       footer: undefined,
       error: {
         errorStatus: false,
         errorCode: undefined,
         errorData: undefined,
-        blogList: undefined,
       },
     }
   }
@@ -36,10 +37,9 @@ class Blog extends React.Component {
       const blog = await Stack.getSpecificEntry(
         "page",
         this.props.location.pathname,
-        "related_pages",
         "en-us"
       )
-      const blogList = await Stack.getEntryWithRef(
+      const result = await Stack.getEntryWithRef(
         "blog_post",
         ["author", "related_post"],
         "en-us"
@@ -50,11 +50,23 @@ class Blog extends React.Component {
         "en-us"
       )
       const footer = await Stack.getEntry("footer", "en-us")
+
+      const archive = []
+      const blogLists = []
+      result[0].forEach((blogs) => {
+        if (blogs.is_archived) {
+          archive.push(blogs)
+        } else {
+          blogLists.push(blogs)
+        }
+      })
+
       this.setState({
         entry: blog[0],
         header: header[0][0],
         footer: footer[0][0],
-        blogList: blogList[0],
+        blogList: blogLists,
+        archived: archive,
         error: { errorStatus: false },
       })
     } catch (error) {
@@ -73,46 +85,60 @@ class Blog extends React.Component {
         seo={this.state.entry.seo}
         activeTab="Blog"
       >
-        <Banner
-          title={this.state.entry.title}
-          hero_banner={this.state.entry.page_components[0].hero_banner}
-          short
+        <RenderComponents
+          pageComponents={this.state.entry.page_components}
+          blogsPage
         />
-        <div className="max-width blog-roll padding-top">
-          {this.state.blogList.map((post) => (
-            <a
-              className="blog-entry padding-bottom"
-              href={`/blog${post.url}`}
-              key={post.title}
-            >
-              <div className="thumb">
-                <img
-                  src="https://via.placeholder.com/200x140"
-                  alt="Blog Title"
-                />
-              </div>
-              <div className="content">
-                <div className="inner">
-                  <h3>{post.title}</h3>
-                  <cite>
-                    <span className="date">{dateSetter(post.date)}</span>
-                    <span className="author">{post.author[0].title}</span>
-                  </cite>
-                  <div
-                    className="description"
-                    dangerouslySetInnerHTML={{
-                      __html: `${post.body.slice(0, 180)}....`,
-                    }}
-                  />
-                  <p className="cta">Read More</p>
+        <div className="blog-container">
+          <div className="blog-column-left">
+            {this.state.blogList?.map((bloglist, index) => (
+              <div className="blog-list" key={index}>
+                {bloglist.featured_image && (
+                  <Link href={bloglist.url}>
+                    <img
+                      alt="blog img"
+                      className="blog-list-img"
+                      src={bloglist.featured_image.url}
+                    />
+                  </Link>
+                )}
+                <div className="blog-content">
+                  {bloglist.title && (
+                    <Link to={bloglist.url}>
+                      <h3>{bloglist.title}</h3>
+                    </Link>
+                  )}
+                  <p>
+                    {moment(bloglist.date).format("ddd, MMM D YYYY")},{" "}
+                    <strong>{bloglist.author[0].title}</strong>
+                  </p>
+                  {bloglist.body &&
+                    ReactHtmlParser(bloglist.body.slice(0, 300))}
+                  {bloglist.url ? (
+                    <Link to={bloglist.url}>
+                      <span>{"Read more -->"}</span>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
-            </a>
-          ))}
+            ))}
+          </div>
+          <div className="blog-column-right">
+            {this.state.entry.page_components[1].widget && (
+              <h2>{this.state.entry.page_components[1].widget.title_h2} </h2>
+            )}
+            <ArchiveRelative blogs={this.state.archived} />
+          </div>
         </div>
       </Layout>
+    ) : this.state.error.errorStatus ? (
+      this.props.history.push("/error", [this.state.error])
+    ) : this.state.error.errorStatus ? (
+      this.props.history.push("/error", [this.state.error])
     ) : (
-      ""
+      <Skeleton count={40} />
     )
   }
 }

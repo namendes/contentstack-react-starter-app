@@ -1,13 +1,20 @@
 /* eslint-disable import/no-anonymous-default-export */
 const contentstack = require("contentstack")
-console.log(process.env);
+
 const Stack = contentstack.Stack({
   api_key: process.env.REACT_APP_APIKEY,
   delivery_token: process.env.REACT_APP_DELIVERY_TOKEN,
   environment: process.env.REACT_APP_ENVIRONMENT,
-  region: process.env.REACT_APP_REGION ? process.env.REACT_APP_REGION : "us",
+  region:
+    process.env.REACT_APP_CONTENTSTACK_REGION !== "us"
+      ? process.env.REACT_APP_CONTENTSTACK_REGION
+      : "us",
 })
-console.log(Stack);
+
+if (process.env.REACT_APP_CUSTOM_HOST) {
+  Stack.setHost(process.env.REACT_APP_CUSTOM_HOST)
+}
+
 export default {
   getEntryWithRef(ctUid, ref, locale) {
     return new Promise((resolve, reject) => {
@@ -20,7 +27,6 @@ export default {
         .find()
         .then(
           (result) => {
-            console.log(result);
             resolve(result)
           },
           (error) => {
@@ -34,7 +40,6 @@ export default {
       Stack.ContentType(ctUid)
         .Query()
         .language(locale)
-        .includeOwner()
         .toJSON()
         .find()
         .then(
@@ -47,11 +52,12 @@ export default {
         )
     })
   },
-  getSpecificEntry(ctUid, entryUrl, locale) {
+  getSpecificEntryWithRef(ctUid, entryUrl, ref, locale) {
     return new Promise((resolve, reject) => {
       const blogQuery = Stack.ContentType(ctUid)
         .Query()
-        // .language(locale)
+        .language(locale)
+        .includeReference(ref)
         .includeOwner()
         .toJSON()
       const data = blogQuery.where("url", `${entryUrl}`).find()
@@ -65,12 +71,11 @@ export default {
       )
     })
   },
-  getSpecificEntryWihtRef(ctUid, entryUrl, ref, locale) {
+  getSpecificEntry(ctUid, entryUrl, locale) {
     return new Promise((resolve, reject) => {
       const blogQuery = Stack.ContentType(ctUid)
         .Query()
         .language(locale)
-        .includeReference(ref)
         .includeOwner()
         .toJSON()
       const data = blogQuery.where("url", `${entryUrl}`).find()
