@@ -40,23 +40,6 @@ body p {
   max-width: 1280px;
 }
 
-.padding-top {
-  padding-top: 24px;
-}
-
-.padding-left {
-  padding-left: 24px;
-}
-
-.padding-bottom {
-  padding-bottom: 24px;
-}
-
-.padding-both {
-  padding-top: 24px;
-  padding-bottom: 24px;
-}
-
 .note-div {
   background: #f2efff;
 }
@@ -92,7 +75,6 @@ nav ul li a {
 
 header {
   background: #fff;
-  height: 100px;
   position: sticky;
   top: 0;
   z-index: 9;
@@ -116,6 +98,10 @@ header .wrapper-logo img {
 header nav {
   flex: 1 1 100%;
   text-align: right;
+}
+
+.header-div {
+  height: 70px;
 }
 
 .header-ul {
@@ -147,7 +133,7 @@ footer a {
 }
 
 .footer-nav-li {
-  padding: 0 30px;
+  padding: 0;
 }
 
 .col-half {
@@ -461,9 +447,11 @@ footer a {
   width: 350px;
 }
 
+.mission-icon, .mission-section-content {
+  display: inline-block;
+}
+
 .mission-icon {
-  height: 50px;
-  margin-top: 12px;
   display: inline-block;
   padding-right: 32px;
 }
@@ -566,14 +554,14 @@ footer a {
 }
 
 .input-fields input {
-  width: 90%;
+  width: 100%;
   background-color: #f3f3f3;
   padding: 16px 15px;
   border: none;
 }
 
 .text-field input {
-  width: 90%;
+  width: 100%;
   height: 120px;
   background-color: #f3f3f3;
   padding: 25px 15px;
@@ -603,9 +591,6 @@ footer a {
   text-align: center;
   min-height: 400px;
   padding-top: 80px;
-}
-#detail-error{
-  display: none;
 }
 
 .header .menu-btn {
@@ -638,6 +623,13 @@ footer a {
 /* ========================== */
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+  .header {
+    height: 70px;
+    background-color: #fff;
+  }
+  .header-div {
+    height: auto;
+  }
   .footer-div {
     flex-direction: column;
   }
@@ -745,24 +737,22 @@ footer a {
   nav ul li {
     padding: 15px 0;
   }
-  body h1 {
+  h1 h2 h3 {
     font-weight: bold;
+    letter-spacing: 0.1px;
+  }
+  body h1 {
     font-size: 29px;
     line-height: 38px;
     letter-spacing: 0.2px;
   }
   body h2 {
-    font-size: 36px;
-    font-weight: bold;
     font-size: 20px;
     line-height: 28px;
-    letter-spacing: 0.1px;
   }
   body h3 {
-    font-weight: bold;
     font-size: 14px;
     line-height: 24px;
-    letter-spacing: 0.1px;
   }
   .btn {
     border: none;
@@ -1012,8 +1002,7 @@ footer a {
     display: flex;
     justify-content: space-evenly;
     text-align: center;
-    margin-top: 21px;
-    margin: 63px;
+    margin: 80px 63px 63px 63px;
     flex-wrap: nowrap;
   }
   .home-advisor-section>img {
@@ -1161,8 +1150,5 @@ footer a {
   .blog-detail {
     width: 65%;
     margin-left: 23px;
-  }
-  .footer-nav-li{
-    padding: 0;;
   }
 }

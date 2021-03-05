@@ -7,7 +7,7 @@ export default function Section(props) {
   const { section } = props
   function contentSection() {
     return (
-      <div className="home-content">
+      <div className="home-content" key="section-1">
         {section.title_h2 && <h2>{section.title_h2}</h2>}
         {section.description && <p>{section.description}</p>}
         {section.call_to_action.title && section.call_to_action.href ? (
@@ -22,7 +22,13 @@ export default function Section(props) {
   }
 
   function imageContent() {
-    return <img src={section.image.url} alt={section.image.filename} />
+    return (
+      <img
+        src={section.image.url}
+        alt={section.image.filename}
+        key="section-2"
+      />
+    )
   }
   return (
     <div className="home-advisor-section">

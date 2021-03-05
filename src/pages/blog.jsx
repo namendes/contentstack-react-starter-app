@@ -93,7 +93,7 @@ class Blog extends React.Component {
             {this.state.blogList?.map((bloglist, index) => (
               <div className="blog-list" key={index}>
                 {bloglist.featured_image && (
-                  <Link href={bloglist.url}>
+                  <Link to={bloglist.url}>
                     <img
                       alt="blog img"
                       className="blog-list-img"

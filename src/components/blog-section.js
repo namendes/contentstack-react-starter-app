@@ -37,8 +37,8 @@ export default function BlogSection(props) {
               {blog.title && <h3>{blog.title}</h3>}
               {blog.body && ReactHtmlParser(blog.body.slice(0, 300))}
               {blog.url && (
-                <Link href={blog.url} passHref>
-                  <a className="blogpost-readmore">{"Read More -->"}</a>
+                <Link to={blog.url} className="blogpost-readmore">
+                  {"Read More -->"}
                 </Link>
               )}
             </div>

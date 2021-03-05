@@ -22,7 +22,7 @@ export default function SectionBucket(props) {
             {bucket.description && ReactHtmlParser(bucket.description)}
             {bucket.call_to_action.title ? (
               <Link
-                href={
+                to={
                   bucket.call_to_action.href ? bucket.call_to_action.href : "#"
                 }
               >

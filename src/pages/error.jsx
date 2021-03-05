@@ -45,6 +45,6 @@ export default class Error extends React.Component {
       )
     }
 
-    return <div>Looding.......</div>
+    return ""
   }
 }
