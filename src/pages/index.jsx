@@ -46,7 +46,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     return !this.state.error.errorStatus && this.state.entry ? (
       <Layout
         header={this.state.header}
