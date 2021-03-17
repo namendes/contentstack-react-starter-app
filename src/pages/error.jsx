@@ -18,12 +18,11 @@ export default class Error extends React.Component {
 
   async componentDidMount() {
     try {
-      const header = await Stack.getEntryWithRef(
+      const header = await Stack.getEntry(
         "header",
-        "navigation_menu.page_reference",
-        "en-us"
+        "navigation_menu.page_reference"
       )
-      const footer = await Stack.getEntry("footer", "en-us")
+      const footer = await Stack.getEntry("footer")
       this.setState({
         header: header[0][0],
         footer: footer[0][0],

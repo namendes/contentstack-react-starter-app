@@ -21,18 +21,16 @@ class Home extends React.Component {
 
   async componentDidMount() {
     try {
-      const result = await Stack.getSpecificEntryWithRef(
+      const result = await Stack.getEntryByUrl(
         "page",
         this.props.location.pathname,
-        ["page_components.from_blog.featured_blogs"],
-        "en-us"
+        ["page_components.from_blog.featured_blogs"]
       )
-      const header = await Stack.getEntryWithRef(
+      const header = await Stack.getEntry(
         "header",
-        "navigation_menu.page_reference",
-        "en-us"
+        "navigation_menu.page_reference"
       )
-      const footer = await Stack.getEntry("footer", "en-us")
+      const footer = await Stack.getEntry("footer")
       this.setState({
         entry: result[0],
         header: header[0][0],
@@ -48,6 +46,7 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     return !this.state.error.errorStatus && this.state.entry ? (
       <Layout
         header={this.state.header}
@@ -57,11 +56,13 @@ class Home extends React.Component {
       >
         <RenderComponenets pageComponents={this.state.entry.page_components} />
       </Layout>
-    ) : this.state.error.errorStatus ? (
-      this.props.history.push("/error", [this.state.error])
     ) : (
+      //  this.state.error.errorStatus ? (
+      //   this.props.history.push("/error", [this.state.error])
+      // ) : (
       ""
     )
+    // )
   }
 }
 export default Home

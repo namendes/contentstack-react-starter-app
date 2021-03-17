@@ -23,7 +23,7 @@ export default function Footer(props) {
         </div>
         <div className="col-half">
           <nav>
-            <ul>
+            <ul className="nav-ul">
               {footer.navigation.link?.map((link) => (
                 <li key={link.title} className="footer-nav-li">
                   <Link to={link.href}>{link.title}</Link>

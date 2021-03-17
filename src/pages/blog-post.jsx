@@ -26,19 +26,17 @@ class BlogPost extends React.Component {
 
   async componentDidMount() {
     try {
-      const banner = await Stack.getSpecificEntry("page", "/blog", "en-us")
-      const blog = await Stack.getSpecificEntryWithRef(
+      const banner = await Stack.getEntryByUrl("page", "/blog")
+      const blog = await Stack.getEntryByUrl(
         "blog_post",
         this.props.location.pathname,
-        ["author", "related_post"],
-        "en-us"
+        ["author", "related_post"]
       )
-      const header = await Stack.getEntryWithRef(
+      const header = await Stack.getEntry(
         "header",
-        "navigation_menu.page_reference",
-        "en-us"
+        "navigation_menu.page_reference"
       )
-      const footer = await Stack.getEntry("footer", "en-us")
+      const footer = await Stack.getEntry("footer")
       this.setState({
         entry: blog[0],
         banner: banner[0],

@@ -33,22 +33,19 @@ class Blog extends React.Component {
 
   async componentDidMount() {
     try {
-      const blog = await Stack.getSpecificEntry(
+      const blog = await Stack.getEntryByUrl(
         "page",
-        this.props.location.pathname,
-        "en-us"
+        this.props.location.pathname
       )
-      const result = await Stack.getEntryWithRef(
-        "blog_post",
-        ["author", "related_post"],
-        "en-us"
-      )
-      const header = await Stack.getEntryWithRef(
+      const result = await Stack.getEntry("blog_post", [
+        "author",
+        "related_post",
+      ])
+      const header = await Stack.getEntry(
         "header",
-        "navigation_menu.page_reference",
-        "en-us"
+        "navigation_menu.page_reference"
       )
-      const footer = await Stack.getEntry("footer", "en-us")
+      const footer = await Stack.getEntry("footer")
 
       const archive = []
       const blogLists = []

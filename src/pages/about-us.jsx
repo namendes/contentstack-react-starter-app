@@ -23,18 +23,16 @@ class About extends React.Component {
 
   async componentDidMount() {
     try {
-      const result = await Stack.getSpecificEntryWithRef(
+      const result = await Stack.getEntryByUrl(
         "page",
         this.props.location.pathname,
-        ["page_components.from_blog.featured_blogs"],
-        "en-us"
+        ["page_components.from_blog.featured_blogs"]
       )
-      const header = await Stack.getEntryWithRef(
+      const header = await Stack.getEntry(
         "header",
-        "navigation_menu.page_reference",
-        "en-us"
+        "navigation_menu.page_reference"
       )
-      const footer = await Stack.getEntry("footer", "en-us")
+      const footer = await Stack.getEntry("footer")
       this.setState({
         entry: result[0],
         header: header[0][0],
