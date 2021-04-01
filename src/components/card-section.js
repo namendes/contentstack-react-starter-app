@@ -1,15 +1,13 @@
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react"
 import { Link } from "react-router-dom"
 
 export default function CardSection(props) {
+  const { cards } = props
   return (
     <div className="demo-section">
-      {props.cards?.map((card, index) => (
-        <div className="cards" key={index}>
+      {cards?.map((card) => (
+        <div className="cards" key={card.title_h3}>
           {card.title_h3 && <h3>{card.title_h3}</h3>}
           {card.description && <p>{card.description}</p>}
           <div className="card-cta">

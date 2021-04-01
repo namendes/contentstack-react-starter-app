@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/prop-types */
 import React from "react"
 
@@ -11,9 +10,9 @@ export default function TeamSection(props) {
         {ourTeam.description ? <p>{ourTeam.description}</p> : ""}
       </div>
       <div className="team-content">
-        {ourTeam.employees?.map((employee, index) => {
+        {ourTeam.employees?.map((employee) => {
           return (
-            <div className="team-details" key={index}>
+            <div className="team-details" key={employee.name}>
               {employee.image && (
                 <img alt={employee.image.filename} src={employee.image.url} />
               )}

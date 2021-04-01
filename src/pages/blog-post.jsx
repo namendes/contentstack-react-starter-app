@@ -1,7 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-console */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-danger */
 /* eslint-disable react/prop-types */
 import React from "react"
 import moment from "moment"
@@ -27,11 +23,11 @@ class BlogPost extends React.Component {
   async componentDidMount() {
     try {
       const banner = await Stack.getEntryByUrl("page", "/blog")
-      const blog = await Stack.getEntryByUrl(
-        "blog_post",
-        this.props.location.pathname,
-        ["author", "related_post"]
-      )
+      const { location } = this.props
+      const blog = await Stack.getEntryByUrl("blog_post", location.pathname, [
+        "author",
+        "related_post",
+      ])
       const header = await Stack.getEntry(
         "header",
         "navigation_menu.page_reference"
@@ -45,7 +41,6 @@ class BlogPost extends React.Component {
         error: { errorStatus: false },
       })
     } catch (error) {
-      console.error(error)
       this.setState({
         error: { errorStatus: true, errorCode: 404, errorData: error },
       })
@@ -53,43 +48,44 @@ class BlogPost extends React.Component {
   }
 
   render() {
-    return !this.state.error.errorStatus && this.state.entry ? (
-      <Layout
-        header={this.state.header}
-        footer={this.state.footer}
-        seo={this.state.entry.seo}
-        activeTab="Blog"
-      >
-        <RenderComponents
-          pageComponents={this.state.banner.page_components}
-          blogsPage
-        />
-        <div className="blog-container">
-          <div className="blog-detail">
-            <h2>{this.state.entry.title ? this.state.entry.title : ""}</h2>
-            <p>
-              {moment(this.state.entry.date).format("ddd, MMM D YYYY")},{" "}
-              <strong>{this.state.entry.author[0].title}</strong>
-            </p>
-            {ReactHtmlParser(this.state.entry.body)}
-          </div>
-          <div className="blog-column-right">
-            <div className="related-post">
-              {this.state.banner.page_components[2].widget && (
-                <h2>{this.state.banner.page_components[2].widget.title_h2}</h2>
-              )}
-              {this.state.entry.related_post && (
-                <ArchiveRelative blogs={this.state.entry.related_post} />
-              )}
+    const { header, footer, entry, error, banner } = this.state
+    const { history } = this.props
+    if (!error.errorStatus && entry) {
+      return (
+        <Layout
+          header={header}
+          footer={footer}
+          seo={entry.seo}
+          activeTab="Blog"
+        >
+          <RenderComponents pageComponents={banner.page_components} blogsPage />
+          <div className="blog-container">
+            <div className="blog-detail">
+              <h2>{entry.title ? entry.title : ""}</h2>
+              <p>
+                {moment(entry.date).format("ddd, MMM D YYYY")},{" "}
+                <strong>{entry.author[0].title}</strong>
+              </p>
+              {ReactHtmlParser(entry.body)}
+            </div>
+            <div className="blog-column-right">
+              <div className="related-post">
+                {banner.page_components[2].widget && (
+                  <h2>{banner.page_components[2].widget.title_h2}</h2>
+                )}
+                {entry.related_post && (
+                  <ArchiveRelative blogs={entry.related_post} />
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </Layout>
-    ) : this.state.error.errorStatus ? (
-      this.props.history.push("/error", [this.state.error])
-    ) : (
-      ""
-    )
+        </Layout>
+      )
+    }
+    if (error.errorStatus) {
+      history.push("/error", [error])
+    }
+    return ""
   }
 }
 export default BlogPost

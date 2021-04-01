@@ -1,6 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-array-index-key */
 import React from "react"
 import { Link } from "react-router-dom"
 import ReactHtmlParser from "react-html-parser"
@@ -14,8 +12,8 @@ export default function SectionBucket(props) {
         {section.description && <p>{section.description}</p>}
       </div>
       <div className="member-section">
-        {section.buckets?.map((bucket, index) => (
-          <div className="content-section" key={index}>
+        {section.buckets?.map((bucket) => (
+          <div className="content-section" key={bucket.title_h3}>
             {bucket.icon && <img src={bucket.icon.url} alt="bucket icon" />}
 
             {bucket.title_h3 ? <h3>{bucket.title_h3}</h3> : ""}

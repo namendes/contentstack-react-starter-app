@@ -1,7 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 
 import React from "react"
@@ -33,10 +29,8 @@ class Blog extends React.Component {
 
   async componentDidMount() {
     try {
-      const blog = await Stack.getEntryByUrl(
-        "page",
-        this.props.location.pathname
-      )
+      const { location } = this.props
+      const blog = await Stack.getEntryByUrl("page", location.pathname)
       const result = await Stack.getEntry("blog_post", [
         "author",
         "related_post",
@@ -66,7 +60,6 @@ class Blog extends React.Component {
         error: { errorStatus: false },
       })
     } catch (error) {
-      console.error(error)
       this.setState({
         error: { errorStatus: true, errorCode: 404, errorData: error },
       })
@@ -74,68 +67,68 @@ class Blog extends React.Component {
   }
 
   render() {
-    return !this.state.error.errorStatus && this.state.entry ? (
-      <Layout
-        header={this.state.header}
-        footer={this.state.footer}
-        seo={this.state.entry.seo}
-        activeTab="Blog"
-      >
-        <RenderComponents
-          pageComponents={this.state.entry.page_components}
-          blogsPage
-        />
-        <div className="blog-container">
-          <div className="blog-column-left">
-            {this.state.blogList?.map((bloglist, index) => (
-              <div className="blog-list" key={index}>
-                {bloglist.featured_image && (
-                  <Link to={bloglist.url}>
-                    <img
-                      alt="blog img"
-                      className="blog-list-img"
-                      src={bloglist.featured_image.url}
-                    />
-                  </Link>
-                )}
-                <div className="blog-content">
-                  {bloglist.title && (
+    const { header, footer, entry, error, archived, blogList } = this.state
+    const { history } = this.props
+
+    if (!error.errorStatus && entry) {
+      return (
+        <Layout
+          header={header}
+          footer={footer}
+          seo={entry.seo}
+          activeTab="Blog"
+        >
+          <RenderComponents pageComponents={entry.page_components} blogsPage />
+          <div className="blog-container">
+            <div className="blog-column-left">
+              {blogList?.map((bloglist) => (
+                <div className="blog-list" key={bloglist.title}>
+                  {bloglist.featured_image && (
                     <Link to={bloglist.url}>
-                      <h3>{bloglist.title}</h3>
+                      <img
+                        alt="blog img"
+                        className="blog-list-img"
+                        src={bloglist.featured_image.url}
+                      />
                     </Link>
                   )}
-                  <p>
-                    {moment(bloglist.date).format("ddd, MMM D YYYY")},{" "}
-                    <strong>{bloglist.author[0].title}</strong>
-                  </p>
-                  {bloglist.body &&
-                    ReactHtmlParser(bloglist.body.slice(0, 300))}
-                  {bloglist.url ? (
-                    <Link to={bloglist.url}>
-                      <span>{"Read more -->"}</span>
-                    </Link>
-                  ) : (
-                    ""
-                  )}
+                  <div className="blog-content">
+                    {bloglist.title && (
+                      <Link to={bloglist.url}>
+                        <h3>{bloglist.title}</h3>
+                      </Link>
+                    )}
+                    <p>
+                      {moment(bloglist.date).format("ddd, MMM D YYYY")},{" "}
+                      <strong>{bloglist.author[0].title}</strong>
+                    </p>
+                    {bloglist.body &&
+                      ReactHtmlParser(bloglist.body.slice(0, 300))}
+                    {bloglist.url ? (
+                      <Link to={bloglist.url}>
+                        <span>{"Read more -->"}</span>
+                      </Link>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="blog-column-right">
+              {entry.page_components[1].widget && (
+                <h2>{entry.page_components[1].widget.title_h2} </h2>
+              )}
+              <ArchiveRelative blogs={archived} />
+            </div>
           </div>
-          <div className="blog-column-right">
-            {this.state.entry.page_components[1].widget && (
-              <h2>{this.state.entry.page_components[1].widget.title_h2} </h2>
-            )}
-            <ArchiveRelative blogs={this.state.archived} />
-          </div>
-        </div>
-      </Layout>
-    ) : this.state.error.errorStatus ? (
-      this.props.history.push("/error", [this.state.error])
-    ) : this.state.error.errorStatus ? (
-      this.props.history.push("/error", [this.state.error])
-    ) : (
-      ""
-    )
+        </Layout>
+      )
+    }
+    if (error.errorStatus) {
+      history.push("/error", [error])
+    }
+    return ""
   }
 }
 

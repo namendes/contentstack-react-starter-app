@@ -1,7 +1,5 @@
-/* eslint-disable no-console */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React from "react"
 import Stack from "../sdk/entry"
 
@@ -38,7 +36,6 @@ class Home extends React.Component {
         error: { errorStatus: false },
       })
     } catch (error) {
-      console.error(error)
       this.setState({
         error: { errorStatus: true, errorCode: 404, errorData: error },
       })
@@ -46,22 +43,25 @@ class Home extends React.Component {
   }
 
   render() {
-    return !this.state.error.errorStatus && this.state.entry ? (
-      <Layout
-        header={this.state.header}
-        footer={this.state.footer}
-        seo={this.state.entry.seo}
-        activeTab="Home"
-      >
-        <RenderComponenets pageComponents={this.state.entry.page_components} />
-      </Layout>
-    ) : (
-      //  this.state.error.errorStatus ? (
-      //   this.props.history.push("/error", [this.state.error])
-      // ) : (
-      ""
-    )
-    // )
+    const { header, footer, entry, error } = this.state
+    const { history } = this.props
+    if (!error.errorStatus && entry) {
+      return (
+        <Layout
+          header={header}
+          footer={footer}
+          seo={entry.seo}
+          activeTab="Home"
+        >
+          <RenderComponenets pageComponents={entry.page_components} />
+        </Layout>
+      )
+    }
+
+    if (error.errorStatus) {
+      history.push("/error", [error])
+    }
+    return ""
   }
 }
 export default Home

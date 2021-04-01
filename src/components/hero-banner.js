@@ -1,7 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
-/* eslint-disable eqeqeq */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react"
 import { Link } from "react-router-dom"
 
@@ -14,14 +12,14 @@ export default function HeroBanner(props) {
         background: banner.bg_color ? banner.bg_color : "",
       }}
     >
-      <div className={`${props.title == "about" ? "about" : "home"}-content`}>
+      <div className={`${props.title === "about" ? "about" : "home"}-content`}>
         {banner.banner_title && (
           <h1 className="hero-title">{banner.banner_title}</h1>
         )}
         {banner.banner_description ? (
           <p
             className={`hero-description ${
-              props.title == "about" && "about-desc"
+              props.title === "about" && "about-desc"
             }`}
           >
             {banner.banner_description}

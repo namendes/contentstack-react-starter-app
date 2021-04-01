@@ -1,8 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable react/prefer-stateless-function */
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
 import React from "react"
 import Stack from "../sdk/entry"
 import Layout from "../components/layout"
@@ -33,9 +29,10 @@ export default class Error extends React.Component {
   }
 
   render() {
-    if (this.state.header && this.state.footer) {
+    const { header, footer } = this.state
+    if (header && footer) {
       return (
-        <Layout header={this.state.header} footer={this.state.footer}>
+        <Layout header={header} footer={footer}>
           <div className="error-page">
             <h1>404: Not Found</h1>
             <p>You just hit a route that doesn&#39;t exist... the sadness.</p>

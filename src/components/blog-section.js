@@ -1,8 +1,5 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prefer-stateless-function */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react/no-array-index-key */
 
 import React from "react"
 import { Link } from "react-router-dom"
@@ -24,8 +21,8 @@ export default function BlogSection(props) {
         )}
       </div>
       <div className="home-featured-blogs">
-        {fromBlog.featured_blogs.map((blog, index) => (
-          <div className="featured-blog" key={index}>
+        {fromBlog.featured_blogs.map((blog) => (
+          <div className="featured-blog" key={blog.title}>
             {blog.featured_image && (
               <img
                 src={blog.featured_image.url}

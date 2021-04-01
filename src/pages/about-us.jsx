@@ -1,9 +1,4 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable array-callback-return */
-/* eslint-disable consistent-return */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-console */
 import React from "react"
 import Stack from "../sdk/entry"
 
@@ -23,11 +18,10 @@ class About extends React.Component {
 
   async componentDidMount() {
     try {
-      const result = await Stack.getEntryByUrl(
-        "page",
-        this.props.location.pathname,
-        ["page_components.from_blog.featured_blogs"]
-      )
+      const { location } = this.props
+      const result = await Stack.getEntryByUrl("page", location.pathname, [
+        "page_components.from_blog.featured_blogs",
+      ])
       const header = await Stack.getEntry(
         "header",
         "navigation_menu.page_reference"
@@ -40,7 +34,6 @@ class About extends React.Component {
         error: { errorStatus: false },
       })
     } catch (error) {
-      console.error(error)
       this.setState({
         error: { errorStatus: true, errorCode: 404, errorData: error },
       })
@@ -48,23 +41,25 @@ class About extends React.Component {
   }
 
   render() {
-    return !this.state.error.errorStatus && this.state.entry ? (
-      <Layout
-        header={this.state.header}
-        footer={this.state.footer}
-        seo={this.state.entry.seo}
-        activeTab="About"
-      >
-        <RenderComponents
-          pageComponents={this.state.entry.page_components}
-          about
-        />
-      </Layout>
-    ) : this.state.error.errorStatus ? (
-      this.props.history.push("/error", [this.state.error])
-    ) : (
-      ""
-    )
+    const { header, footer, entry, error } = this.state
+    const { history } = this.props
+
+    if (!error.errorStatus && entry) {
+      return (
+        <Layout
+          header={header}
+          footer={footer}
+          seo={entry.seo}
+          activeTab="About"
+        >
+          <RenderComponents pageComponents={entry.page_components} about />
+        </Layout>
+      )
+    }
+    if (error.errorStatus) {
+      history.push("/error", [error])
+    }
+    return ""
   }
 }
 export default About
