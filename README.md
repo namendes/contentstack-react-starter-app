@@ -7,7 +7,7 @@ About Contentstack: Contentstack is a headless CMS with an API-first approach th
 
 About this project: Create a professional website using React.js and Contentstack.
 
-![contentstack-react-starter-app-vercel-app](https://user-images.githubusercontent.com/41462986/109799781-6c348880-7c42-11eb-95ec-379a756d7c38.png)
+![contentstack-react-starter-app-vercel-app](/public/starter-app.png)
 
 
 ## Live Demo
