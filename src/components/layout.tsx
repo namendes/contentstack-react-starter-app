@@ -22,7 +22,7 @@ export default function Layout({ entry }: { entry: EntryProps }) {
     header: {} as HeaderProps,
     footer: {} as FooterProps,
     navHeaderList: {} as HeadermenuProps,
-    navFooterList: {} as NavmenuProps,
+    navFooterList: {} as NavmenuProps, 
   });
   const mergeObjs = (...objs: any) => Object.assign({}, ...objs);
   const jsonObj = mergeObjs(
